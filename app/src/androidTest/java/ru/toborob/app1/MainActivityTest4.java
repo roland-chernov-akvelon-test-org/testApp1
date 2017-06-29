@@ -18,6 +18,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -29,7 +32,7 @@ import com.xamarin.testcloud.espresso.ReportHelper;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class MainActivityFailTest3 {
+public class MainActivityTest4 {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
@@ -41,7 +44,7 @@ public class MainActivityFailTest3 {
     }
 
     @Test
-    public void mainActivityFailTest3() {
+    public void mainActivityTest4() {
         // Added a sleep statement to match the app's execution delay.
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
@@ -51,25 +54,28 @@ public class MainActivityFailTest3 {
             e.printStackTrace();
         }
 
-        ViewInteraction button = onView(
-                allOf(childAtPosition(
-                        childAtPosition(
-                                withId(android.R.id.content),
-                                0),
-                        1),
-                        isDisplayed()));
-        button.check(matches(isDisplayed()));
+        ViewInteraction appCompatEditText = onView(
+                allOf(withId(R.id.edit_message), isDisplayed()));
+        appCompatEditText.perform(click());
+
+        ViewInteraction appCompatEditText2 = onView(
+                allOf(withId(R.id.edit_message), isDisplayed()));
+        appCompatEditText2.perform(replaceText("test"), closeSoftKeyboard());
+
+        ViewInteraction appCompatButton = onView(
+                allOf(withText("Send"), isDisplayed()));
+        appCompatButton.perform(click());
 
         ViewInteraction textView = onView(
-                allOf(withText("App1"),
+                allOf(withText("test"),
                         childAtPosition(
-                                allOf(withId(R.id.action_bar),
+                                allOf(withId(R.id.activity_display_message),
                                         childAtPosition(
-                                                withId(R.id.action_bar_container),
+                                                withId(android.R.id.content),
                                                 0)),
                                 0),
                         isDisplayed()));
-        textView.check(matches(withText("App1")));
+        textView.check(matches(withText("test")));
 
     }
 

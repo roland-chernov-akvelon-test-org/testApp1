@@ -6,6 +6,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
 
+import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,6 +19,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import android.support.test.runner.AndroidJUnit4;
+import com.xamarin.testcloud.espresso.Factory;
+import com.xamarin.testcloud.espresso.ReportHelper;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -25,6 +29,8 @@ public class MainActivityTest {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+    @Rule
+    public ReportHelper reportHelper = Factory.getReportHelper();
 
     @Test
     public void mainActivityTest() {
@@ -46,9 +52,14 @@ public class MainActivityTest {
         appCompatEditText2.perform(replaceText("test"), closeSoftKeyboard());
 
         ViewInteraction appCompatButton = onView(
-                allOf(withText("Отправить"), isDisplayed()));
+                allOf(withText("SEND"), isDisplayed()));
         appCompatButton.perform(click());
 
+    }
+
+    @After
+    public void TearDown(){
+        reportHelper.label("Stopping App");
     }
 
 }
